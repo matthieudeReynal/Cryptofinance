@@ -70,11 +70,12 @@ def doubleSpend(q, z, k, A, n):
 #print(doubleSpend(0.3,6,2))
 z = 6
 k = 4.0
+"""
 def honnestMining(q):
     duree = doubleSpend(q, z, k)[1]
     #print(duree)
     return (q/duree*B*n)
-
+"""
 def simulateDoubleSpend(n, A, k, z):
     hashrate = []
     DoubleSpend = []
@@ -111,7 +112,7 @@ def PHonnest(q):
     return proba
 
 difficultyAdjustement = (p-q+p*q*(p-q)+p*q) / (p**2*q+p-q)
-def SelfishMining(q, gamma):
+def SelfishMining(q, gamma, n):
     
     cycle = 0
     dureeAttaque = 1
@@ -124,7 +125,7 @@ def SelfishMining(q, gamma):
         nb2016BlocksMined = nbBlocs // 2016
         
         while True:
-            print(cycle)    
+            #print(cycle)    
             #print(nb2016BlocksMined)
             #print(nbBlocs)
             #probaSelfish = PSelfish(q, gamma)# * difficultyAdjustement**nb2016BlocksMined
@@ -133,7 +134,7 @@ def SelfishMining(q, gamma):
             aList = [0, 1]
             distribution = [probaHonnest, probaSelfish]
             attackSuccess = random.choices(aList, distribution)
-            print(distribution)
+            #print(distribution)
             """
             if avance == 1 and attackSuccess[0] == 0:
                 bList = [0, 1]
@@ -196,7 +197,7 @@ def SelfishMining(q, gamma):
             nbBlocs += 1
         cycle += 1
     return[gainAttaquant, dureeAttaque]
-
+'''
 def honnestMining2(q):
     duree = SelfishMining(q, gamma)[1]
     #print(duree)
@@ -204,15 +205,16 @@ def honnestMining2(q):
 
 result = SelfishMining(0.25, 0.77)
 print(result[0]/result[1]/6.25)
-
+'''
 def simulateSelfishMining(n, gamma):
     result = []
     hashrate = []
     selfishMining = []
     HonnestMining = []
     for i in range(20,100):
+        print("computing ", i-20, "/80")
         hashrate.append(i/200.0)
-        result.append(SelfishMining(hashrate[i-20], gamma))
+        result.append(SelfishMining(hashrate[i-20], gamma, n))
         selfishMining.append(result[i-20][0]/result[i-20][1]/B)
         HonnestMining.append(hashrate[i-20])
     plt.clf()
@@ -221,7 +223,7 @@ def simulateSelfishMining(n, gamma):
     plt.show() 
 
 
-def SelfishMiningBCash(q, gamma):
+def SelfishMiningBCash(q, gamma, n):
     
     cycle = 0
     dureeAttaque = 1
@@ -316,7 +318,7 @@ def simulateSelfishMiningBCash(n, gamma):
     HonnestMining = []
     for i in range(20,100):
         hashrate.append(i/200.0)
-        result.append(SelfishMiningBCash(hashrate[i-20], gamma))
+        result.append(SelfishMiningBCash(hashrate[i-20], gamma, n))
         selfishMining.append(result[i-20][0]/result[i-20][1]/B)
         HonnestMining.append(hashrate[i-20])
     plt.plot(hashrate, selfishMining, 'r') 
@@ -334,4 +336,14 @@ def menu():
         k = int(input("k = "))
         z = int(input("z = "))
         simulateDoubleSpend(n, A, k, z)
+    if saisie == 2:
+        n = int(input("n = "))
+        gamma = float(input("gamma = "))
+        simulateSelfishMining(n, gamma)
+    if saisie == 3:
+        n = int(input("n = "))
+        gamma = float(input("gamma = "))
+        simulateSelfishMiningBCash(n, gamma)
+    if saisie == 4:
+        print('')
 menu()
